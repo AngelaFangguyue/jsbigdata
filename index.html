@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document解决js数据精度问题和大数相加问题</title>
+  </head>
+  <body>
+    <div>解决js数据精度问题和大数相加问题</div>
+  </body>
+  <script>
+    function add(a, b) {
+      if (typeof a === "string" && typeof b === "string") {
+        let a1 = a.split("").reverse();
+        let b1 = b.split("").reverse();
+
+        function strToNum(p) {
+          if (typeof p === "number") return p;
+
+          if (typeof p === "string" && !isNaN(parseInt(p))) return parseInt(p);
+
+          if (isNaN(p)) return 0;
+        }
+
+        // let res = "";//只有数组才有unshift方法
+        let res = [];
+
+        let res0 = 0;
+        let res1 = 0;
+
+        for (let i = 0; i <= Math.max(a.length, b.length); i++) {
+          console.log("i:a1[i]:res0", i, a1[i], res0);
+
+          res1 = strToNum(a1[i]) + strToNum(b1[i]) + res0;
+          console.log("res1:", res1);
+
+          res.unshift(res1 % 10);
+          console.log("res:", res);
+
+          res0 = res1 >= 10 ? 1 : 0;
+          console.log("res0:", res0);
+        }
+        console.log("res:", res);
+
+        let res2 = res[0] > 0 ? res.join("") : res.join("").slice(1);
+        console.log(typeof res2);
+        return res2;
+      }
+    }
+
+    console.log(add("214", "93"));
+
+    function bigadd(a, b) {
+      let res = [];
+      //let res = "";
+      let c = false;
+      let a1 = a.split("");
+      let b1 = b.split("");
+      while (a1.length || b1.length || c) {
+        c += ~~a1.pop() + ~~b1.pop();
+
+        res.unshift(c % 10);
+        //res += c % 10;
+        c = c > 9;
+      }
+
+      console.log("typeof res:", Array.isArray(res));
+      //   let res2 = res[0] > 0 ? res.join("") : res.join("").slice(1);
+
+      let res2 = res.join("");
+
+      return res2;
+      //return res;
+    }
+
+    console.log("cccc:", bigadd("214", "99"));
+  </script>
+</html>
